@@ -184,7 +184,7 @@ def dump(db, where):
                       point['fieldKey'] = list(field_metadata.keys())
                       point['fieldType'] = list(field_metadata.values())
     else:
-        print("Invalid format for 'results'.")
+        print(f"Invalid format for 'results': {results}")
 
     data = {
     'results': [
