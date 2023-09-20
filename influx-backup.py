@@ -204,6 +204,8 @@ def dump(db, where):
 
         data['results'].append(json_data)
 
+    print(data)
+
     client.close()
 
     msfields = {}
