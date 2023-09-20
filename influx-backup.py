@@ -178,13 +178,14 @@ def dump(db, where):
                             measurement_name = keys[0]
                         first_point = False
 
-                    time = point['time']
-                    for field, value in point.items():
+                    point_copy = point.copy()
+                    time = point_copy['time']
+                    for field, value in point_copy.items():
                         if field not in ['time']:
                             field_metadata[field] = str(type(value)).split("'")[1]
 
-                        point['fieldKey'] = list(field_metadata.keys())
-                        point['fieldType'] = list(field_metadata.values())
+                        point_copy['fieldKey'] = list(field_metadata.keys())
+                        point_copy['fieldType'] = list(field_metadata.values())
                 else:
                     print(f"result does not have attribute 'get_points': {results}")
             else:
