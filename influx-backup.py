@@ -13,7 +13,7 @@ import json
 import os
 import sys
 import time
-
+import influxdb
 import requests
 
 from urllib.parse import urlparse
@@ -165,8 +165,7 @@ def dump(db, where):
     data = {'results': []}
 
     for result in results:
-        print(type(result))
-        if isinstance(result, dict):
+        if isinstance(result, influxdb.resultset.ResultSet):
             measurement_name = ''
             keys = list(result[0].keys())
             if keys:
