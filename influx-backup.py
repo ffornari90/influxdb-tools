@@ -168,15 +168,14 @@ def dump(db, where):
         if isinstance(result, influxdb.resultset.ResultSet):
             measurement_name = ''
             field_metadata = {}
-            first_point = True
+
+            if hasattr(result, "keys"):
+                keys = list(result.keys())
+                if isinstance(keys[0], tuple):
+                    measurement_name = keys[0][0]
 
             if hasattr(result, "get_points"):
                 for point in result.get_points():
-                    if first_point:
-                        keys = list(point.keys())
-                        if keys:
-                            measurement_name = keys[0]
-                        first_point = False
 
                     time = point['time']
                     for field, value in point.items():
@@ -203,8 +202,6 @@ def dump(db, where):
         }
 
         data['results'].append(json_data)
-
-    print(data)
 
     client.close()
 
