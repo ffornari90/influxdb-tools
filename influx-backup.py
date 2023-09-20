@@ -165,18 +165,27 @@ def dump(db, where):
     data = {'results': []}
 
     for result in results:
-        if isinstance(result, ResultSet):
-            measurement_name = result._measurement
-            field_metadata = {}
+        print(type(result))
+        if isinstance(result, dict):
+            measurement_name = ''
+            keys = list(result[0].keys())
+            if keys:
+                measurement_name = keys[0]
 
-            for point in result:
-                time = point['time']
-                for field, value in point.items():
-                    if field not in ['time']:
-                        field_metadata[field] = str(type(value)).split("'")[1]
+            if hasattr(result, "get_points"):
+                field_metadata = {}
+                for point in result.get_points():
+                    time = point['time']
+                    for field, value in point.items():
+                        if field not in ['time']:
+                            field_metadata[field] = str(type(value)).split("'")[1]
 
-                    point['fieldKey'] = list(field_metadata.keys())
-                    point['fieldType'] = list(field_metadata.values())
+                        point['fieldKey'] = list(field_metadata.keys())
+                        point['fieldType'] = list(field_metadata.values())
+                else:
+                    print(f"result does not have attribute 'get_points': {results}")
+            else:
+                print(f"Invalid format for 'result': {result}")
 
             json_data = {
                 'statement_id': 0,
@@ -190,9 +199,6 @@ def dump(db, where):
             }
 
             data['results'].append(json_data)
-
-        else:
-            print(f"Invalid format for 'result': {result}")
 
     client.close()
 
