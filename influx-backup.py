@@ -186,23 +186,23 @@ def dump(db, where):
                     point['fieldKey'] = list(field_metadata.keys())
                     point['fieldType'] = list(field_metadata.values())
 
-                else:
-                    print(f"result does not have attribute 'get_points': {result}")
             else:
-                print(f"Invalid format for 'result': {result}")
+                print(f"result does not have attribute 'get_points': {result}")
+        else:
+            print(f"Invalid format for 'result': {result}")
 
-            json_data = {
-                'statement_id': 0,
-                'series': [
-                    {
-                        'name': measurement_name,
-                        'columns': ['fieldKey', 'fieldType'],
-                        'values': [[field_key, field_type] for field_key, field_type in field_metadata.items()]
-                    }
-                ]
-            }
+        json_data = {
+            'statement_id': 0,
+            'series': [
+                {
+                    'name': measurement_name,
+                    'columns': ['fieldKey', 'fieldType'],
+                    'values': [[field_key, field_type] for field_key, field_type in field_metadata.items()]
+                }
+            ]
+        }
 
-            data['results'].append(json_data)
+        data['results'].append(json_data)
 
     client.close()
 
