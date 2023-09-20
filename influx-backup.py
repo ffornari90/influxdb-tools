@@ -187,7 +187,7 @@ def dump(db, where):
                     point['fieldType'] = list(field_metadata.values())
 
                 else:
-                    print(f"result does not have attribute 'get_points': {results}")
+                    print(f"result does not have attribute 'get_points': {result}")
             else:
                 print(f"Invalid format for 'result': {result}")
 
