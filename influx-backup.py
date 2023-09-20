@@ -164,44 +164,35 @@ def dump(db, where):
 
     data = {'results': []}
 
-    if isinstance(results, list) and len(results) > 0 and isinstance(results[0], dict):
-        for result in results:
-            if isinstance(result, list) and len(result) > 0 and isinstance(result[0], dict):
-                measurement_name = ''
-                field_metadata = {}
-                keys = list(result[0].keys())
-                if keys:
-                    measurement_name = keys[0]
+    for result in results:
+        if isinstance(result, ResultSet):
+            measurement_name = result._measurement
+            field_metadata = {}
 
-                if hasattr(result, "get_points"):
-                    for point in result.get_points():
-                        time = point['time']
-                        for field, value in point.items():
-                            if field not in ['time']:
-                                field_metadata[field] = str(type(value)).split("'")[1]
+            for point in result:
+                time = point['time']
+                for field, value in point.items():
+                    if field not in ['time']:
+                        field_metadata[field] = str(type(value)).split("'")[1]
 
-                            point['fieldKey'] = list(field_metadata.keys())
-                            point['fieldType'] = list(field_metadata.values())
-                    else:
-                        print(f"result does not have attribute 'get_points': {results}")
-                else:
-                    print(f"Invalid format for 'result': {result}")
+                    point['fieldKey'] = list(field_metadata.keys())
+                    point['fieldType'] = list(field_metadata.values())
 
-                json_data = {
-                    'statement_id': 0,
-                    'series': [
-                        {
-                            'name': measurement_name,
-                            'columns': ['fieldKey', 'fieldType'],
-                            'values': [[field_key, field_type] for field_key, field_type in field_metadata.items()]
-                        }
-                    ]
-                }
+            json_data = {
+                'statement_id': 0,
+                'series': [
+                    {
+                        'name': measurement_name,
+                        'columns': ['fieldKey', 'fieldType'],
+                        'values': [[field_key, field_type] for field_key, field_type in field_metadata.items()]
+                    }
+                ]
+            }
 
-                data['results'].append(json_data)
+            data['results'].append(json_data)
 
-    else:
-        print(f"Invalid format for 'results': {results}")
+        else:
+            print(f"Invalid format for 'result': {result}")
 
     client.close()
 
