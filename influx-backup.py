@@ -167,13 +167,17 @@ def dump(db, where):
     for result in results:
         if isinstance(result, influxdb.resultset.ResultSet):
             measurement_name = ''
-            keys = list(result[0].keys())
-            if keys:
-                measurement_name = keys[0]
+            field_metadata = {}
+            first_point = True
 
             if hasattr(result, "get_points"):
-                field_metadata = {}
                 for point in result.get_points():
+                    if first_point:
+                        keys = list(point.keys())
+                        if keys:
+                            measurement_name = keys[0]
+                        first_point = False
+
                     time = point['time']
                     for field, value in point.items():
                         if field not in ['time']:
