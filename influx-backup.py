@@ -17,7 +17,7 @@ import time
 import requests
 
 from urllib.parse import urlparse
-from influxdb import InfluxDBClient, ResultSet
+from influxdb import InfluxDBClient
 
 READ_CHUCK_SIZE = 10000
 WRITE_CHUNK_SIZE = 5000
