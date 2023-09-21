@@ -173,6 +173,8 @@ def dump(db, where):
                 keys = list(result.keys())
                 if isinstance(keys[0], tuple):
                     measurement_name = keys[0][0]
+            else:
+                print(f"result does not have attribute 'keys': {result}")
 
             if hasattr(result, "get_points"):
                 for point in result.get_points():
