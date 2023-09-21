@@ -165,9 +165,9 @@ def dump(db, where):
     data = {'results': []}
 
     for result in results:
+        measurement_name = ''
+        field_metadata = {}
         if isinstance(result, influxdb.resultset.ResultSet):
-            measurement_name = ''
-            field_metadata = {}
 
             if hasattr(result, "keys"):
                 keys = list(result.keys())
