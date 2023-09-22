@@ -149,9 +149,9 @@ def dump(db, where):
     queries = []
     for m in measurements:
         if RETENTION:
-            queries.append(f'SELECT *::field FROM "{db}"."{RETENTION}"."{m}"')
+            queries.append(f'SELECT *::field FROM "{db}"."{RETENTION}"."{m}" LIMIT 1')
         else:
-            queries.append(f'SELECT *::field FROM "{m}"')
+            queries.append(f'SELECT *::field FROM "{m}" LIMIT 1')
 
     parsed_url = urlparse(URL)
     host = parsed_url.hostname
