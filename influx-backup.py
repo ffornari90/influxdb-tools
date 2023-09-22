@@ -231,10 +231,14 @@ def dump(db, where):
             continue
 
         print(f'Dumping {m}... ', end='')
-        if GZIP:
-            f = gzip.open(f'{DIR}/{measurement2filename(m)}.gz', 'wt')
-        else:
-            f = open(f'{DIR}/{measurement2filename(m)}', 'w')
+        try:
+            if GZIP:
+                f = gzip.open(f'{DIR}/{measurement2filename(m)}.gz', 'wt')
+            else:
+                f = open(f'{DIR}/{measurement2filename(m)}', 'w')
+        except OSError as e:
+            if e.errno == 36:
+                print(f"Error: File name too long for measurement '{m}'.")
 
         if RETENTION:
             query = f'SELECT * FROM "{db}"."{RETENTION}"."{m}" {where}'
