@@ -239,6 +239,7 @@ def dump(db, where):
         except OSError as e:
             if e.errno == 36:
                 print(f"Error: File name too long for measurement '{m}'.")
+                continue
 
         if RETENTION:
             query = f'SELECT * FROM "{db}"."{RETENTION}"."{m}" {where}'
